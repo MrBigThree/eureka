@@ -1,5 +1,17 @@
 apply plugin: 'war'
-apply plugin: 'jetty'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.org.akhikhl.gretty:gretty:2.0.0"
+    }
+}
+
+apply plugin: "org.akhikhl.gretty"
 
 dependencies {
     compile project(':eureka-core')
@@ -10,7 +22,7 @@ dependencies {
     compile "com.sun.jersey:jersey-servlet:${jerseyVersion}"
     compile "com.sun.jersey.contribs:jersey-guice:${jerseyVersion}"
     compile 'org.slf4j:slf4j-log4j12:1.6.1'
-    runtime 'org.codehaus.jettison:jettison:1.2' 
+    runtime 'org.codehaus.jettison:jettison:1.2'
     providedCompile "javax.servlet:servlet-api:${servletVersion}"
 
     testCompile project(':eureka-test-utils')
@@ -21,13 +33,13 @@ dependencies {
 
 task copyLibs(type: Copy) {
     into 'testlibs/WEB-INF/libs'
-    from configurations.runtime	
+    from configurations.runtime
 }
 
 war {
     from (project(':eureka-resources').file('build/resources/main'))
 }
 
-jettyRun.doFirst {
-    contextPath 'eureka'
-}
+//jettyRun.doFirst {
+//    contextPath 'eureka'
+//}
